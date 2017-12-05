@@ -16,9 +16,24 @@ Utilizei:
  - Ruby 2.4
  - RSpec 3.7
 
+ - GEMs
+
+``` 
+ gem 'spring-commands-rspec', group: :development
+```
+
+ Utilize o comando abaixo para gerar o /bin/rspec
+ 
+ ```
+ bundle exec spring binstub rspec
+ ```
+
+```
+gem install faker
+```
+
 ATENÇÃO
 ---------------------
-
 
 
 Configuração inicial
