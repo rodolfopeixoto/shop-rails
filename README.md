@@ -183,6 +183,192 @@ end
 
 ```
 
+
+#### attributes_for()
+
+O attributes_for retorna um hash com do registro passado por parâmetro.
+
+```
+  it 'Use the attributes_for' do
+    attrs = attributes_for(:customer)
+    attrs1 = attributes_for(:customer_vip)
+    attrs2 = attributes_for(:customer_default)
+    puts attrs
+    puts attrs1
+    puts attrs2
+  end
+
+  #=> {:name=>"Earline Ratke MD", :email=>"maudie.stark@rennerjohnson.com"}
+  #=> {:name=>"Earline Ratke MD", :email=>"maudie.stark@rennerjohnson.com", :vip=>true, :days_to_pay=>30}
+  #=> {:name=>"Earline Ratke MD", :email=>"maudie.stark@rennerjohnson.com", :vip=>false, :days_to_pay=>15}
+```
+
+#### Transient Attributes [ Atributos transitórios ]
+
+É um atributo do factory passageiro que não será chamado pelo teste. 
+
+
+factories/customers.rb
+
+```
+FactoryBot.define do
+  factory :customer, aliases: [:user] do
+
+    transient do
+      upcased false
+    end
+
+    name Faker::Name.name  
+    email Faker::Internet.email
+
+    factory :customer_vip do
+      vip true
+      days_to_pay 30
+    end
+
+    factory :customer_default do
+      vip false
+      days_to_pay 15
+    end
+
+    after(:create) do |customer, evaluator|
+      customer.name.upcase! if evaluator.upcased
+    end
+
+  end
+end
+
+```
+
+models/customer_spec.rb
+
+```
+require 'rails_helper'
+
+RSpec.describe Customer, type: :model do
+  #...
+  it 'Trasient Attribute' do
+    customer = create(:customer_default, upcased: true)
+    expect(customer.name.upcase).to eq(customer.name)
+  end
+
+  it { expect{ create(:customer) }.to change{Customer.all.size}.by(1) }
+end
+
+
+
+#### Trait
+
+Agrupar atributos para factories herdadas.
+
+
+File: factories/customers.rb
+
+```
+FactoryBot.define do
+  factory :customer, aliases: [:user] do
+
+    transient do
+      upcased false
+    end
+
+    name Faker::Name.name  
+    email Faker::Internet.email
+    
+    trait :male do
+      gender 'M'
+    end
+    trait :female do
+      gender 'F'
+    end
+
+    trait :vip do
+      vip true
+      days_to_pay 30
+    end
+
+    trait :default do
+      vip false
+      days_to_pay 15
+    end
+
+    factory :customer_male, traits: [:male]
+    factory :customer_female, traits: [:female]
+    factory :customer_vip, traits: [:vip]
+    factory :customer_default, traits: [:default]
+    factory :customer_male_vip, traits: [:male, :vip]
+    factory :customer_female_vip, traits: [:female, :vip]
+    factory :customer_male_default, traits: [:male, :default]
+    factory :customer_female_default, traits: [:female, :default]
+
+    after(:create) do |customer, evaluator|
+      customer.name.upcase! if evaluator.upcased
+    end
+
+  end
+end
+
+```
+
+file: models/customer_spec.rb
+
+```
+require 'rails_helper'
+
+RSpec.describe Customer, type: :model do
+  it '#full_name - Override attributes' do
+    customer = build(:customer, name: 'Rodolfo Gomes Peixoto')
+    expect(customer.full_name).to eq("Sr. Rodolfo Gomes Peixoto")
+  end
+  it 'Customer default' do
+    customer = build(:customer_default)
+    expect(customer.vip).to be false
+  end
+  it 'Customer vip' do
+    customer = build(:customer_vip)
+    expect(customer.vip).to be true
+  end
+  it 'Customer ' do
+    customer = build(:customer)
+    expect(customer.vip).to be nil
+  end
+
+  it 'Customer with days_to_pay nil' do
+    customer = build(:customer)
+    expect(customer.days_to_pay).to be nil
+  end
+
+
+  it 'Use the attributes_for' do
+    attrs = attributes_for(:customer)
+    attrs1 = attributes_for(:customer_vip)
+    attrs2 = attributes_for(:customer_default)
+    puts attrs
+    puts attrs1
+    puts attrs2
+  end
+
+  it 'Trasient Attribute' do
+    customer = create(:customer_default, upcased: true)
+    expect(customer.name.upcase).to eq(customer.name)
+  end
+
+  it 'Cliente Masculino Vip' do
+    customer = create(:customer_male_vip)
+    expect(customer.gender).to eq('M')
+    expect(customer.vip).to be true
+  end 
+
+  it 'Cliente Masculino' do
+    customer = create(:customer_male)
+    expect(customer.gender).to eq('M')
+  end
+
+  it { expect{ create(:customer) }.to change{Customer.all.size}.by(1) }
+end
+
+```
+
 ### Links diretos:
 
 

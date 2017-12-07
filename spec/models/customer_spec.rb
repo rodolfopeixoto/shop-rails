@@ -17,9 +17,36 @@ RSpec.describe Customer, type: :model do
     customer = build(:customer)
     expect(customer.vip).to be nil
   end
+
   it 'Customer with days_to_pay nil' do
     customer = build(:customer)
     expect(customer.days_to_pay).to be nil
+  end
+
+
+  it 'Use the attributes_for' do
+    attrs = attributes_for(:customer)
+    attrs1 = attributes_for(:customer_vip)
+    attrs2 = attributes_for(:customer_default)
+    puts attrs
+    puts attrs1
+    puts attrs2
+  end
+
+  it 'Trasient Attribute' do
+    customer = create(:customer_default, upcased: true)
+    expect(customer.name.upcase).to eq(customer.name)
+  end
+
+  it 'Cliente Masculino Vip' do
+    customer = create(:customer_male_vip)
+    expect(customer.gender).to eq('M')
+    expect(customer.vip).to be true
+  end 
+
+  it 'Cliente Masculino' do
+    customer = create(:customer_male)
+    expect(customer.gender).to eq('M')
   end
 
   it { expect{ create(:customer) }.to change{Customer.all.size}.by(1) }
