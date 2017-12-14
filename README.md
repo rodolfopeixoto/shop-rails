@@ -369,6 +369,137 @@ end
 
 ```
 
+
+#### Callback
+
+after(:build) -> Depois de ser criado em memória com build ou create
+
+before(:create) -> Antes de efetivamente salvar
+
+after(:create) -> Depois que é salvo
+
+
+#### Sequences
+
+Como usar uma sequences
+
+```
+sequence(:email) { |n| "meu_email#{n}@email.com" }
+```
+
+Podemos também dar um número inicial para o sequence:
+
+```
+sequence(:email,35) { |n| "meu_email#{n}@email.com" }
+```
+
+
+
+Podemos também dar um caracter inicial para o sequence:
+
+OBS: Podemos utilizar qualquer objeto que implemente o método next.
+
+```
+sequence(:email,'a') { |n| "meu_email#{n}@email.com" }
+```
+
+
+#### Associations (belongs_to)
+
+O factory é esperto o suficiente para verificar a associação.
+
+```
+FactoryBot.define do
+  factory :order do
+    sequence(:description) { |number| "Pedido número: #{number}" }
+    customer # associação belongs_to
+  end
+end
+
+```
+
+
+```
+require 'rails_helper'
+
+RSpec.describe Order, type: :model do
+  it 'Tem 1 pedido' do
+    order = create(:order)
+    expect(order.customer).to be_kind_of(Customer)
+  end
+end
+
+```
+
+Pode-ser sobreescrever e dizer explicitamente que desejamos instânciar o objeto e associar ele:
+
+```
+require 'rails_helper'
+
+RSpec.describe Order, type: :model do
+  it 'Tem 1 pedido' do
+    customer = create(:customer)
+    order = create(:order, customer: customer)
+    expect(order.customer).to be_kind_of(Customer)
+  end
+end
+```
+
+
+
+Caso desejemos sobreescrever a factory basta adicionar association
+
+```
+FactoryBot.define do
+  factory :order do
+    sequence(:description) { |number| "Pedido número: #{number}" }
+    association :customer, factory: :customer # = customer
+  end
+end
+```
+
+
+
+#### Create List
+
+Para não criar na mão cada item, podemos criar uma lista de itens para testar.
+
+```
+require 'rails_helper'
+
+RSpec.describe Order, type: :model do
+  it 'Tem 1 pedido' do
+    order = create(:order)
+    expect(order.customer).to be_kind_of(Customer)
+  end
+
+  it 'Tem 3 pedidos' do
+    orders = create_list(:order, 3)
+    expect(orders.count).to eq(3)
+  end
+end
+
+```
+
+
+Pode-se sobreescrever um determinado atributo.
+
+```
+require 'rails_helper'
+
+RSpec.describe Order, type: :model do
+  it 'Tem 1 pedido' do
+    order = create(:order)
+    expect(order.customer).to be_kind_of(Customer)
+  end
+
+  it 'Tem 3 pedidos' do
+    orders = create_list(:order, 3, description: 'Produto viabilizado')
+    expect(orders.count).to eq(3)
+  end
+end
+```
+
 ### Links diretos:
 
 
