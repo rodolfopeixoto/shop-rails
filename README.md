@@ -638,6 +638,32 @@ end
 ```
 
 
+#### build and create
+
+build_list -> Cria os records em memória
+
+createlist -> Cria os records e salva.
+
+create_par -> Cria dois elementos.
+
+build_par  -> Cria dois elementos.
+
+build_stubbed -> Cria um objeto fake 
+
+build_stubbed_list -> Cria vários objetos fake
+
+
+#### FactoryBot lint
+
+O FactoryBot Lint verifica o código de testes e caso haja uma alteração, ele lhe avisa na hora.
+
+Adicionar no arquivo rails_helper.rb
+
+```ruby
+  config.before(:suite) do
+    FactoryBot.lint
+  end
+```
 
 ### Links diretos
 
