@@ -49,6 +49,9 @@ group :development, :test do
   gem 'capybara'
   
   gem 'spring-commands-rspec'
+  gem 'httparty'
+  gem 'webmock'
+  gem 'vcr'
 end
 
 group :development do
