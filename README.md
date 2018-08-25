@@ -1,4 +1,4 @@
-# rogpe [ Calculator Project ]
+# RSpec - Rails TDD Project
 
 TDD - RSPEC | Ruby
 
