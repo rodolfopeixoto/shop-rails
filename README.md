@@ -679,6 +679,32 @@ Adicionar no arquivo rails_helper.rb
   rspec spec --seed 62354
  ```
 
+#### Gerar os arquivos _spec.rb
+
+Gera os arquivos, caso não tenha os arquivos.
+
+```
+rails g rspec:model product
+```
+
+### Gerar as Specs para o model
+
+ * Quando instanciado com atributos válidos, o model de ver válido
+ * Validações devem ser testadas
+ * Métodos de classe e instância devem executar corretamente. 
+  
+  Exemplo:
+
+ * Product
+  * It 'is valid with description, price and category'
+  * It 'is invalid without description'
+  * it 'is invalid without price'
+  * it 'is invalid without category'
+  * It 'return a product with full description'
+
+
+
+
 ### GEMS
  - Timecop
 ### Links diretos
