@@ -13,6 +13,7 @@ RSpec.describe Customer, type: :model do
     customer = build(:customer_vip)
     expect(customer.vip).to be true
   end
+
   it 'Customer ' do
     customer = build(:customer)
     expect(customer.vip).to be nil
@@ -42,7 +43,21 @@ RSpec.describe Customer, type: :model do
     customer = create(:customer_male_vip)
     expect(customer.gender).to eq('M')
     expect(customer.vip).to be true
-  end 
+  end
+  
+  it '#travel_to' do
+    travel_to Time.zone.local(2014,11,24,01,04,44) do
+      @customer = create(:customer_vip)
+    end
+    expect(@customer.created_at).to eq(Time.new(2014,11,24,01,04,44))
+  end
+  
+  it '#travel_to less than' do
+    travel_to Time.zone.local(2014,11,24,01,04,44) do
+      @customer = create(:customer_vip)
+    end
+    expect(@customer.created_at).to be < Time.now
+  end
 
   it 'Cliente Masculino' do
     customer = create(:customer_male)

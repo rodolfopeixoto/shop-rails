@@ -665,6 +665,22 @@ Adicionar no arquivo rails_helper.rb
   end
 ```
 
+#### Testes em ordem aleatória
+ 
+ ```
+   rspec spec --order random
+   # Randomized with seed 62354
+ ```
+
+ Para rodar os testes na mesma ordem basta pegar o código do seed:
+
+ ```
+  # Randomized with seed 62354
+  rspec spec --seed 62354
+ ```
+
+### GEMS
+ - Timecop
 ### Links diretos
 
 Desenvolvimento
