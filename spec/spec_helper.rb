@@ -10,6 +10,7 @@ VCR.configure do |config|
   #Variable ENV
   #config.filter_sensitive_data('<API-URL>') { ENV[:API_KEY] } 
   #config.filter_sensitive_data('<API-URL>') { Rails.application.secrets.<nome_da_chave> }
+  
 
 end
 
