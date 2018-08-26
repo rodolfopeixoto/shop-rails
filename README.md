@@ -702,7 +702,48 @@ rails g rspec:model product
   * it 'is invalid without category'
   * It 'return a product with full description'
 
+Há duas formas usando shoulda matchers de fazer o teste:
 
+Utilizando should
+
+```
+  it { should validate_presence_of(:description) }
+  it { should validate_presence_of(:price) }
+  it { should validate_presence_of(:category) }
+
+  it { should belong_to(:category) }
+```
+ou utilizando: is_expected.to o should não é mais utilizado no rspec
+```
+  it { is_expected.to validate_presence_of(:description) }
+  it { is_expected.to validate_presence_of(:price) }
+  it { is_expected.to validate_presence_of(:category) }
+
+  it { is_expected.to belong_to(:category) }
+```
+
+Organizando com **context**
+
+```
+
+  context 'Validates' do
+    it { is_expected.to validate_presence_of(:description) }
+    it { is_expected.to validate_presence_of(:price) }
+    it { is_expected.to validate_presence_of(:category) }
+  end
+
+  context 'Associations' do
+    it { is_expected.to belong_to(:category) }
+  end
+
+
+  context 'Instance Methods' do
+    it 'return a product with a full description' do
+      product = create(:product)
+      expect(product.full_description).to eq("#{product.description} - #{product.price}")
+    end
+  end
+``` 
 
 
 ### GEMS
