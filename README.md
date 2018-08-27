@@ -743,8 +743,35 @@ Organizando com **context**
       expect(product.full_description).to eq("#{product.description} - #{product.price}")
     end
   end
-``` 
+```
 
+
+### O que testar no CONTROLLER?
+
+ Responsabilidade do Controller:
+  - Receber requisições ( com ou sem autenticação/autorização)
+  - Manipular o Models
+  - Criar respostas
+    - Renderizando um template
+    - Respondendo com um formato solicitado (JSON)
+    -  Redirecionando para outra rota.
+
+Por exemplo:
+
+```
+require 'rails_helper'
+
+RSpec.describe CustomersController, type: :controller do
+  it "responds successfully" do
+    get :index
+    expect(response).to be_success
+  end
+end
+
+
+```
+
+O **be_success** é um alias para **have_http_status "200"**
 
 ### GEMS
  - Timecop
