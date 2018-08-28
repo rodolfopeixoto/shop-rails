@@ -773,6 +773,37 @@ end
 
 O **be_success** é um alias para **have_http_status "200"**
 
+
+#### Capybara
+
+Gemfile
+
+```
+
+  gem 'capybara-webkit'
+
+``` 
+
+spec_helper.rb
+
+```
+Capybara.javascript_driver = :webkit
+```
+
+Para executar no docker basta acessar o terminal do container
+
+```
+docker-compose run --rm web sh
+```
+
+E rodar o comando abaixo:
+
+```
+xvfb-run -a rspec spec
+```
+
+Se você executar sem o xvfb-run -a o teste com javascript não funcionará.
+
 ### GEMS
  - Timecop
 ### Links diretos

@@ -55,7 +55,10 @@ group :development, :test do
   gem 'webmock'
   gem 'vcr'
   gem 'rails-controller-testing'
+  
+  gem 'capybara-webkit'
 end
+
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
