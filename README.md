@@ -706,7 +706,7 @@ Há duas formas usando shoulda matchers de fazer o teste:
 
 Utilizando should
 
-```
+```ruby
   it { should validate_presence_of(:description) }
   it { should validate_presence_of(:price) }
   it { should validate_presence_of(:category) }
@@ -714,7 +714,7 @@ Utilizando should
   it { should belong_to(:category) }
 ```
 ou utilizando: is_expected.to o should não é mais utilizado no rspec
-```
+```ruby
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:price) }
   it { is_expected.to validate_presence_of(:category) }
@@ -724,7 +724,7 @@ ou utilizando: is_expected.to o should não é mais utilizado no rspec
 
 Organizando com **context**
 
-```
+```ruby
 
   context 'Validates' do
     it { is_expected.to validate_presence_of(:description) }
@@ -758,7 +758,7 @@ Organizando com **context**
 
 Por exemplo:
 
-```
+```ruby
 require 'rails_helper'
 
 RSpec.describe CustomersController, type: :controller do
@@ -803,6 +803,97 @@ xvfb-run -a rspec spec
 ```
 
 Se você executar sem o xvfb-run -a o teste com javascript não funcionará.
+
+### Para Testar API
+
+```ruby
+require 'rails_helper'
+
+RSpec.describe "Customers", type: :request do
+  describe "GET /customers" do
+    it "works! (now write some real specs)" do
+      get customers_path
+      expect(response).to have_http_status(200)
+    end
+    it "index - JSON" do
+      get '/customers.json'
+      expect(response).to have_http_status(200)
+      expect(response.body).to include_json(
+        [
+          id: /\d/,
+          name: (be_kind_of String),
+          email: (be_kind_of String),
+        ]
+      )
+    end
+    it "show - JSON" do
+      get '/customers/1.json'
+      expect(response).to have_http_status(200)
+      expect(response.body).to include_json(
+          id: /\d/,
+          name: (be_kind_of String),
+          email: (be_kind_of String),
+      )
+    end
+
+
+    it 'create - JSON' do
+      member = create(:member)
+      login_as(member, scope: :member)
+      
+      headers = { "ACCEPT" => "application/json" }
+      
+      customers_params = attributes_for(:customer)
+
+      post '/customers', params: { customer: customers_params }, headers: headers
+      expect(response.body).to include_json(
+        id: /\d/, # Caso tenha alinhado ficaria  customers_params[:address][:street]
+        name: customers_params[:name], # retorna nil
+        email: customers_params.fetch(:email), # retorna o error
+      )
+    end
+
+
+
+    it 'update - JSON' do
+      member = create(:member)
+      login_as(member, scope: :member)
+      
+      headers = { "ACCEPT" => "application/json" }
+
+      customers = Customer.first
+      customers.name += " - ATUALIZADO"
+
+      patch "/customers/#{customers.id}.json", params: { customer: customers.attributes }, headers: headers
+     
+      expect(response.body).to include_json(
+        id: /\d/, # Caso tenha alinhado ficaria  customers_params[:address][:street]
+        name: customers.name, # retorna nil
+        email: customers.email, # retorna o error
+      )
+    end
+
+
+
+    it 'delete - JSON' do
+      member = create(:member)
+      login_as(member, scope: :member)
+      
+      headers = { "ACCEPT" => "application/json" }
+
+      customers = Customer.first
+
+      expect{ delete "/customers/#{customers.id}.json", headers: headers }.to change(Customer, :count).by(-1)
+      expect(response).to have_http_status(204)
+    end
+
+
+  end
+end
+
+
+
+```
 
 ### GEMS
  - Timecop

@@ -2,6 +2,7 @@
 require 'httparty'
 require 'vcr'
 require 'capybara'
+require 'json_matchers/rspec'
 
 VCR.configure do |config|
   config.cassette_library_dir = "spec/fixtures/vcr_cassettes"

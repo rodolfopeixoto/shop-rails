@@ -57,6 +57,8 @@ group :development, :test do
   gem 'rails-controller-testing'
   
   gem 'capybara-webkit'
+  gem 'rspec-json_expectations'
+  gem 'json_matchers'
 end
 
 

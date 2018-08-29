@@ -135,6 +135,9 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (2.1.0)
+    json_matchers (0.10.0)
+      json_schema
+    json_schema (0.19.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     listen (3.0.8)
@@ -219,6 +222,7 @@ GEM
     rspec-expectations (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
+    rspec-json_expectations (2.1.0)
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
@@ -333,6 +337,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 2.5)
   jquery-rails
+  json_matchers
   listen (~> 3.0.5)
   pg
   pry-rails
@@ -340,6 +345,7 @@ DEPENDENCIES
   rails (~> 5.1.0)
   rails-controller-testing
   rails-i18n (~> 5.0.0)
+  rspec-json_expectations
   rspec-rails
   rubocop
   rubycritic
